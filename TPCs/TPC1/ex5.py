@@ -1,5 +1,6 @@
-def lower(s):
-    ns=s.lower()
+
+def upper(s):
+    ns=s.upper()
     print(ns)
 
-lower("A Maria toca guitarra")
+upper("A Maria toca guitarra")
