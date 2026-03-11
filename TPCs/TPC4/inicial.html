@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tun'ao Minho</title>
+    <style>
+        /* Aqui é onde a mágica do visual acontece */
+        html {
+            scroll-behavior: smooth;
+        }
+        section {
+            padding: 20px 0; 
+            width: 100%;
+            max-width: 800px;
+        }
+        /* Estilo do Menu Horizontal */
+        .menu {
+            background-color: #75042f;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            position: sticky; /* Faz o menu ficar preso no topo ao fazer scroll */
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;/* Garante que o padding não estique a página para os lados */
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: #000000; /* Cor do cabeçalho quando passas o rato */
+        }
+
+        /* Estilo da Galeria */
+        /* Container da Galeria para posicionar as setas */
+        .carousel-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .grid-galeria {
+            display: flex;
+            overflow-x: hidden; /* Esconde a barra de scroll feia */
+            gap: 15px;
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+        }
+
+        .grid-galeria img {
+            flex: 0 0 100%; /* Uma foto de cada vez para parecer slide */
+            height: 450px;
+            object-fit: cover;
+            border-radius: 15px;
+            scroll-snap-align: center;
+        }
+
+        /* Estilo das Setas */
+        .seta {
+            background-color: rgba(255, 133, 162, 0.7);
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 15px;
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+            border-radius: 50%;
+            
+        }
+
+        .seta:hover {
+            background-color: #ff85a2;
+        }
+
+        .esquerda { left: 10px; }
+        .direita { right: 10px; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; /* Um cinza bem clarinho */
+            color: #75042f;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-com-fundo {
+            position: relative; /* Necessário para o overlay funcionar */
+            width: 100%;
+            min-height: 400px; /* Altura do cabeçalho */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            
+            /* Configuração da Imagem de Fundo */
+            background-image: url("cjpg.jpg"); /* Nome da tua imagem de fundo */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Opcional: dá um efeito "parallax" giro ao fazer scroll */
+        }
+
+        /* Esta é a camada que escurece a foto para o texto ser lido */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Preto com 50% de transparência */
+            z-index: 1;
+        }
+        .header-container {
+            position: relative; /* Importante! */
+            z-index: 2;         /* Garante que fica À FRENTE do overlay */
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .texto-header {
+            text-align: center;     /* O texto fica alinhado à esquerda dele mesmo, mas centrado no site */
+        }
+
+        .texto-header h1 {
+            font-size: 45px;      /* Muda aqui o tamanho do título */
+            margin: 0;            /* Tira margens que o navegador põe sozinho */
+        }
+
+        .texto-header p {
+            margin: 5px 0 0 0;    /* Pequeno espaço em cima do subtítulo */
+            font-size: 18px;      /* Tamanho da letra do subtítulo */
+        }
+
+        .meu-logo {
+            height: 150px;         /* Ajusta aqui o tamanho do teu logo */
+            width: auto;
+            filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+        }
+
+        main {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* Para não partir no telemóvel */
+            gap: 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-item p {
+            font-size: 1rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .numero {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #75042f;
+            margin-bottom: 10px;
+        }
+        
+        .lista-eventos {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .evento {
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #75042f; /* Cor bordo da tuna */
+            transition: transform 0.2s;
+        }
+
+        .evento:hover {
+            transform: translateX(10px);
+        }
+
+        .evento-link {
+            text-decoration: none; /* Retira o sublinhado */
+            color: inherit;       /* Mantém a cor original do texto */
+            display: block;       /* Faz o link ocupar a largura toda do quadrado */
+        }
+
+        .evento small {
+            color: #75042f;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Efeito extra: o quadrado brilha um pouco quando passas o rato */
+        .evento-link:hover .evento {
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(117, 4, 47, 0.15);
+            transform: scale(1.02);
+        }
+
+        .data {
+            background: #75042f;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            min-width: 60px;
+            margin-right: 20px;
+        }
+
+        .data span {
+            display: block;
+            font-size: 1.5rem;
+        }
+
+        /* Estilo do Card de Recrutamento */
+        .convite-card {
+            background-color: #75042f;
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 10px 20px rgba(117, 4, 47, 0.2);
+        }
+
+        .convite-card h2 {
+            color: white;
+            border-bottom: none; /* Tirar a linha bordo sobre fundo bordo */
+        }
+
+        .info-ensaios {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .botao-social {
+            display: inline-block;
+            background: white;
+            color: #75042f;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .botao-social:hover {
+            background: #ff85a2;
+            color: white;
+        }
+
+        footer {
+            background-color: #75042f; /* Cor escura para contrastar com o resto do site */
+            color: white;
+            width: 100%;
+            padding: 40px 0 20px 0;
+            margin-top: 50px; /* Dá espaço entre a última secção e o fim da página */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-content h2 {
+            color: #ffffff; /* Cor de destaque no título do rodapé */
+            margin-bottom: 20px;
+        }
+
+        .links-contacto p {
+            margin: 10px 0;
+        }
+
+        .links-contacto a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .links-contacto a:hover {
+            color: #000000;
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            padding-top: 20px;
+            width: 80%;
+            border-top: 1px solid #555; /* Linha subtil a separar o copyright */
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header class="header-com-fundo">
+        <div class="overlay"></div> <div class="header-container">
+            <img src="LOGO.png" alt="Logo" class="meu-logo">
+            <div class="texto-header">
+                <h1>Tun'ao Minho</h1>
+                <p>Tuna Académica Feminina da Universidade do Minho</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="menu">
+        <a href="#sobre">Sobre</a>
+        <a href="#percurso">Percurso</a>
+        <a href="#atuacoes">Atuaçõs</a>
+        <a href="#juntate">Junta te a nós</a>
+        <a href="#galeria">Galeria</a>
+        <a href="tunao.html">Tunão</a>
+        <a href="#contactos">Contactos</a>
+    </nav>
+        
+     
+    <main>
+        <section id="sobre">
+            <h2>Sobre nós</h2>
+            <p>A Tun'ao Minho - Tuna Académica Feminina da Universidade do Minho - nasceu em 2012, com a vontade de marcar a diferença no panorama das tunas da nossa região. Das Mordomas (Fundadoras) às Capotilhas (Tunantes), incluindo as Lavradeiras e as Bordadeiras (Caloiras), ficou decidido que a Tuna havia de primar pela originalidade e pela tradição, não fosse o Minho um lugar cheio de lendas e muitas canções. Orgulhamo-nos de ser, cada vez mais, uma tuna de referência no Norte, e também a nível nacional. Passo a passo, ano após ano, carregamos o Minho bordado nas costas e a mesma força de querer continuar a ser diferente.</p>
+            <p>Com apenas doze anos, levamos o melhor da tradição minhota pelo território nacional, internacional, e, mais recentemente, no "Estrelas ao Sábado" da RTP, no qual conseguimos marcar presença na final. Neste momento, somos a tuna feminina portuguesa com mais seguidores no Instagram, contando com mais de 6000, e mantemos uma presença ativa e preponderante nas redes sociais.</p>
+            <p>Organizamos anualmente o Tunão - Festival de Tunas Femininas, tendo sido realizado o I Tunão, a 18 de novembro de 2016. O festival celebra, também o nosso aniversário, realizando-se, todos os anos em novembro, em 2026 celebramos a décima edição deste festival! </p>
+        </section>
+
+        <section id="percurso">
+            <h2 style="text-align: center;">O Nosso Percurso</h2>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="numero">35</div>
+                    <p>Participações em Festivais</p>
+                </div>
+                <div class="stat-item">
+                    <div class="numero">103</div>
+                    <p>Prémios Arrecadados</p>
+                </div>
+                <div class="stat-item">
+                    <div class="numero">9</div>
+                    <p>Festivais Organizados</p>
+                </div>
+                <div class="stat-item">
+                    <div class="numero">3</div>
+                    <p>Apresentações na TV</p>
+                </div>
+            </div>   
+        </section>
+
+        <section id="atuacoes">
+            <h2>Próximas Atuações </h2>
+            <div class="lista-eventos">
+                <a href="https://www.instagram.com/p/DU6To41jTol/?img_index=1" target="_blanck" class="evento-link">
+                    <div class="evento">
+                        <div class="data"><span>13 & 14</span> Mar</div>
+                        <div class="detalhes">
+                            <strong>XVII Serenatas ao Berço</strong>
+                            <p>Guimarães</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="evento">
+                    <div class="data"><span>27 & 28</span> Mar</div>
+                    <a href="https://www.instagram.com/p/DVqoGDxDWHn/" target="_blanck" class="evento-link">
+                    <div class="detalhes">
+                        <strong>VI FETA</strong>
+                        <p>Porto</p>
+                    </div>
+                    </a>
+                </div>
+                <div class="evento">
+                    <div class="data"><span>8</span> Abr</div>
+                    <div class="detalhes">
+                        <strong>V Noite Boémias</strong>
+                        <p>Braga</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="juntate">
+            <div class="convite-card">
+                <h2>Queres fazer parte da nossa história?</h2>
+                <p>Se gostas de música, tradição e queres fazer amizades para a vida, a Tun'ao Minho é o teu lugar!</p>
+                
+                <div class="info-ensaios">
+                    <p>📍 <strong>Onde ensaiamos:</strong> CP1 Universidade do Minho, Campus de Gualtar</p>
+                    <p>⏰ <strong>Horário:</strong> Segunda e Quintas às 21:00h</p>
+                </div>
+
+                <p><em>Não precisas de saber tocar nenhum instrumento, nós ensinamos-te tudo!</em></p>
+                
+                <a href="https://www.instagram.com/tunaominho/" class="botao-social">Envia-nos uma DM!</a>
+            </div>
+        </section>
+
+        <section id="galeria">
+            <div class="carousel-container">
+                <button class="seta esquerda" onclick="document.querySelector('.grid-galeria').scrollBy({left: -300, behavior: 'smooth'})">❮</button>
+                    <div class="grid-galeria">
+                        <img src="foto1.jpg">
+                        <img src="foto2.jpg">
+                        <img src="foto3jpg.jpg">
+                        <img src="foto4.jpg">
+                        <img src="foto5.jpeg">
+                        <img src="foto6.jpg">
+                        <img src="foto7.jpg">
+                        <img src="foto8.jpg">
+                        <img src="foto9.jpg">
+                    </div>
+                <button class="seta direita" onclick="document.querySelector('.grid-galeria').scrollBy({left: 300, behavior: 'smooth'})">❯</button>
+            </div>
+        </section>
+
+    </main>
+        <footer id="contactos">
+            <div class="footer-content">
+                <h2>Contactos & Redes Sociais</h2>
+                <div class="links-contacto">
+                    <p><strong>E-mail:</strong> <a href="mailto:tunaominho@arcum.pt">tunaominho@arcum.pt</a></p>
+                    <p><strong>Facebook:</strong> <a href="https://www.facebook.com/TunaoMinho?locale=pt_PT" target="_blank">Tun'ao Minho</a></p>
+                    <p><strong>Instagram:</strong> <a href="https://www.instagram.com/tunaominho/" target="_blank">@tunaominho</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tun'ao Minho - Todos os direitos reservados.</p>
+            </div>
+        </footer>
+
+</body>
+</html>
