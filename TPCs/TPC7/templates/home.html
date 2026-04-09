@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    Home
+{% endblock %}
+
+{% block body %}
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-primary">Bem-vindo ao Dicionário Médico</h1>
+            <p class="col-md-8 fs-4 mx-auto">
+                Explore a nossa base de dados de termos e conceitos médicos de forma rápida e simples.
+            </p>
+            <a href="/conceitos" class="btn btn-primary btn-lg">Ver Todos os Conceitos</a>
+        </div>
+    </div>
+
+    <div class="row text-center mt-4">
+        <div class="col-md-4">
+            <h3>📖 Definições</h3>
+            <p>Descrições detalhadas e técnicas.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>⚡ Rápido</h3>
+            <p>Acesso instantâneo via JSON.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>💻 API</h3>
+            <p>Acesso programático aos dados.</p>
+        </div>
+    </div>
+{% endblock %}
