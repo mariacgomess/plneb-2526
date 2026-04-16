@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Início — Dicionário Médico{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .hero {
+        margin-top: 3rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 300;
+        line-height: 1.15;
+        margin-bottom: 1rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        color: var(--muted);
+        max-width: 520px;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 3rem 0;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .feature {
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+    }
+
+    .feature-num {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.6rem;
+    }
+
+    .feature h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+    }
+
+    .feature p {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>O seu <em>dicionário</em><br>de termos médicos.</h1>
+    <p>Consulte, pesquise e explore terminologia médica de forma rápida e organizada.</p>
+    <div class="actions">
+        <a href="/pesquisar" class="btn btn-primary">→ Pesquisar</a>
+        <a href="/conceitos" class="btn">Ver todos os conceitos</a>
+        <a href="/tabela" class="btn">Ver tabela</a>
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="features">
+    <div class="feature">
+        <div class="feature-num">01</div>
+        <h3>Pesquisa por substring</h3>
+        <p>Encontre termos que contenham a palavra pesquisada, mesmo que não seja exata.</p>
+    </div>
+    <div class="feature">
+        <div class="feature-num">02</div>
+        <h3>Palavra exata</h3>
+        <p>Pesquise apenas resultados onde a palavra aparece de forma isolada.</p>
+    </div>
+    <div class="feature">
+        <div class="feature-num">03</div>
+        <h3>Case sensitive</h3>
+        <p>Diferencie maiúsculas de minúsculas na pesquisa conforme necessário.</p>
+    </div>
+    <div class="feature">
+        <div class="feature-num">04</div>
+        <h3>Destaque a negrito</h3>
+        <p>A palavra pesquisada fica a negrito nos resultados para fácil identificação.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ designacao }} — Dicionário Médico{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .conceito-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--accent);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .conceito-card h2 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .conceito-card p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--muted);
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-danger {
+        border-color: #c0392b;
+        color: #c0392b;
+    }
+
+    .btn-danger:hover {
+        background: #c0392b;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1><em>{{ designacao }}</em></h1>
+<p class="subtitle">Conceito médico</p>
+
+<div class="conceito-card">
+    <p>{{ descricao }}</p>
+
+    <div class="actions">
+        <a href="/conceitos" class="btn">← Voltar</a>
+        <button class="btn btn-danger" onclick="apagar('{{ designacao }}')">Apagar conceito</button>
+    </div>
+</div>
+
+<script>
+function apagar(designacao) {
+    if (!confirm('Tens a certeza que queres apagar "' + designacao + '"?')) return;
+    fetch('/conceitos/' + encodeURIComponent(designacao), { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => { window.location.href = data.redirect_url; });
+}
+</script>
+{% endblock %}

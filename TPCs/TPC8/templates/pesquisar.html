@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Pesquisar — Dicionário Médico{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .search-box {
+        background: var(--surface);
+        border: 2px solid var(--text);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .search-row {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        font-family: var(--serif);
+        font-size: 1rem;
+        border: 1.5px solid var(--border);
+        background: var(--bg);
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent);
+    }
+
+    .search-input::placeholder {
+        color: var(--muted);
+        font-style: italic;
+    }
+
+    .options-row {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        user-select: none;
+        transition: color 0.2s;
+    }
+
+    .option-label:hover { color: var(--text); }
+
+    .option-label input[type="checkbox"] {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 1.5px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        flex-shrink: 0;
+        transition: border-color 0.2s, background 0.2s;
+    }
+
+    .option-label input[type="checkbox"]:checked {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    .option-label input[type="checkbox"]:checked::after {
+        content: '✓';
+        position: absolute;
+        top: -1px;
+        left: 2px;
+        font-size: 11px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .option-hint {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-left: 0.3rem;
+        font-style: italic;
+    }
+
+    /* Results */
+    .results-header {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .results-count {
+        background: var(--accent);
+        color: white;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .result-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 0.75rem;
+        transition: border-color 0.2s;
+    }
+
+    .result-card:hover {
+        border-left-color: var(--text);
+    }
+
+    .result-term {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+    }
+
+    .result-term b {
+        color: var(--accent);
+        background: var(--accent-light);
+        padding: 0 2px;
+        font-weight: 700;
+    }
+
+    .result-desc {
+        font-size: 0.92rem;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    .result-desc b {
+        color: var(--text);
+        background: #fef3c7;
+        padding: 0 2px;
+        font-weight: 700;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--muted);
+    }
+
+    .no-results .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .no-results p {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+    }
+
+    .active-filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .filter-tag {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        background: var(--accent-light);
+        color: var(--accent);
+        border: 1px solid #d9a090;
+        padding: 0.15rem 0.5rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Pesquisar <em>conceitos</em></h1>
+<p class="subtitle">Pesquisa no termo e na descrição &mdash; resultado destaca a palavra a negrito</p>
+
+<div class="search-box">
+    <form action="/pesquisar" method="get">
+        <div class="search-row">
+            <input
+                class="search-input"
+                type="text"
+                name="query"
+                placeholder="Escreve aqui o que procuras…"
+                value="{{ query }}"
+                autofocus
+            >
+            <button type="submit" class="btn btn-primary">Pesquisar →</button>
+        </div>
+
+        <div class="options-row">
+            <label class="option-label">
+                <input
+                    type="checkbox"
+                    name="word_boundary"
+                    {% if word_boundary %}checked{% endif %}
+                >
+                Palavra exata
+                <span class="option-hint">("dor" não inclui "doença")</span>
+            </label>
+
+            <label class="option-label">
+                <input
+                    type="checkbox"
+                    name="case_sensitive"
+                    {% if case_sensitive %}checked{% endif %}
+                >
+                Maiúsculas/minúsculas
+                <span class="option-hint">("Dor" ≠ "dor")</span>
+            </label>
+        </div>
+    </form>
+</div>
+
+{% if query %}
+    <!-- Filtros ativos -->
+    {% if word_boundary or case_sensitive %}
+    <div class="active-filters">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted);align-self:center;">Filtros ativos:</span>
+        {% if word_boundary %}<span class="filter-tag">Palavra exata</span>{% endif %}
+        {% if case_sensitive %}<span class="filter-tag">Case sensitive</span>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="results-header">
+        Resultados para "{{ query }}"
+        <span class="results-count">{{ resultados|length }}</span>
+    </div>
+
+    {% if resultados %}
+        {% for r in resultados %}
+        <div class="result-card">
+            <div class="result-term">{{ r.desig_label|safe }}</div>
+            <div class="result-desc">{{ r.descricao|safe }}</div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-results">
+            <span class="icon">⌕</span>
+            <p>Nenhum resultado encontrado para "{{ query }}"</p>
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="no-results">
+        <span class="icon">⌕</span>
+        <p>Introduz um termo para pesquisar</p>
+    </div>
+{% endif %}
+{% endblock %}

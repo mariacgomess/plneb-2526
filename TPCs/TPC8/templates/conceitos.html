@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Conceitos — Dicionário Médico{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .conceitos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.6rem;
+    }
+
+    .conceito-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 0.92rem;
+        transition: border-color 0.15s, background 0.15s;
+    }
+
+    .conceito-link:hover {
+        border-color: var(--accent);
+        background: var(--accent-light);
+        color: var(--accent);
+    }
+
+    .add-form {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .add-form h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+        color: var(--muted);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .form-input {
+        flex: 1;
+        min-width: 160px;
+        padding: 0.6rem 0.9rem;
+        font-family: var(--serif);
+        font-size: 0.92rem;
+        border: 1.5px solid var(--border);
+        background: var(--bg);
+        color: var(--text);
+        outline: none;
+    }
+
+    .form-input:focus { border-color: var(--accent); }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Todos os <em>conceitos</em></h1>
+<p class="subtitle">{{ conceitos|list|length }} termos no dicionário</p>
+
+<div class="add-form">
+    <h2>Adicionar conceito</h2>
+    <form action="/conceitos" method="post">
+        <div class="form-row">
+            <input class="form-input" type="text" name="designacao" placeholder="Designação" required>
+            <input class="form-input" type="text" name="descricao" placeholder="Descrição" required>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </div>
+    </form>
+</div>
+
+<div class="conceitos-grid">
+    {% for conceito in conceitos %}
+    <a class="conceito-link" href="/conceitos/{{ conceito }}">{{ conceito }}</a>
+    {% endfor %}
+</div>
+{% endblock %}

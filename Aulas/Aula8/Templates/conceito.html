@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title> {{designacao}} </title>
+
+{% endblock %}
+
+
+{% block body %}
+
+    <b>{{designacao}}:</b> {{descricao}}
+
+    <button type="button" class="btn btn-danger" onclick="apagar_conceito('{{designacao}}')">Apagar</button>
+
+<script>
+    function apagar_conceito(designacao){
+        $.ajax({
+            url: "/conceitos/" + designacao,
+            method: "DELETE",
+            success: function(response){
+                alert("correu bem!");
+                console.log(response);
+            },
+            error: function(response){
+                alert("Correu mal");
+                console.log(response);
+            }
+        });
+    }
+</script>
+{% endblock %}

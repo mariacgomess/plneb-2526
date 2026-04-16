@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dicionário Médico{% endblock %}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f5f2eb;
+            --surface: #fffdf8;
+            --border: #d6cfc0;
+            --text: #1a1612;
+            --muted: #7a6e60;
+            --accent: #b5451b;
+            --accent-light: #f0e8e3;
+            --mono: 'DM Mono', monospace;
+            --serif: 'Source Serif 4', Georgia, serif;
+        }
+
+        body {
+            font-family: var(--serif);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 2px solid var(--text);
+            padding: 0 2rem;
+        }
+
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: var(--accent); }
+
+        main {
+            flex: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2.5rem 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+        }
+
+        h1 em { font-style: italic; color: var(--accent); }
+
+        .subtitle {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.2rem;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            border: 1.5px solid var(--text);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+            letter-spacing: 0.04em;
+        }
+
+        .btn:hover { background: var(--text); color: var(--bg); }
+
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover { background: #8f3515; border-color: #8f3515; color: white; }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Badges */
+        .badge {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #d9a090;
+            padding: 0.15rem 0.5rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+    </style>
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a class="logo" href="/">Dicionário <span>Médico</span></a>
+            <nav>
+                <a href="/">Início</a>
+                <a href="/conceitos">Conceitos</a>
+                <a href="/tabela">Tabela</a>
+                <a href="/pesquisar">Pesquisar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        Dicionário Médico &mdash; PLN 2025/26
+    </footer>
+</body>
+</html>

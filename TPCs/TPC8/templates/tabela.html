@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Tabela — Dicionário Médico{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.92rem;
+        table-layout: fixed;
+    }
+
+    thead tr {
+        background: var(--text);
+        color: var(--bg);
+    }
+
+    thead th {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.1s;
+    }
+
+    tbody tr:hover { background: var(--accent-light); }
+
+    tbody td {
+        padding: 0.7rem 1rem;
+        vertical-align: top;
+    }
+
+    tbody td:first-child {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    tbody td:last-child {
+        color: var(--muted);
+        line-height: 1.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Tabela de <em>conceitos</em></h1>
+<p class="subtitle">{{ conceitos|list|length }} entradas</p>
+
+<div class="table-wrap">
+    <table>
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 75%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Designação</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for designacao, descricao in conceitos.items() %}
+            <tr>
+                <td><a href="/conceitos/{{ designacao }}" style="color:var(--accent);text-decoration:none;">{{ designacao }}</a></td>
+                <td>{{ descricao }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
